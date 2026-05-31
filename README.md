@@ -16,4 +16,12 @@
 ```
 pip install -r requirements.txt
 ```
+#### Generate requirements automatically
+```
+pip freeze > requirements.txt
+```
+## Run the project 
+```
+uvicorn app:app --reload
+```
 
