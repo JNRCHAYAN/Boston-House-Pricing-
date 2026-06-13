@@ -1,13 +1,149 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <meta charset='utf-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <title>Page Title</title>
-    <link rel='stylesheet' href='main.css'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>California House Price Prediction</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f5f5f5;
+            margin:0;
+            padding:0;
+        }
+
+        .container{
+            width:500px;
+            margin:40px auto;
+            background:#fff;
+            padding:25px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,.2);
+        }
+
+        h2{
+            text-align:center;
+            color:#333;
+        }
+
+        label{
+            font-weight:bold;
+            display:block;
+            margin-top:10px;
+        }
+
+        input{
+            width:100%;
+            padding:10px;
+            margin-top:5px;
+            border:1px solid #ccc;
+            border-radius:5px;
+            box-sizing:border-box;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            margin-top:20px;
+            background:#007bff;
+            color:white;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+            font-size:16px;
+        }
+
+        button:hover{
+            background:#0056b3;
+        }
+
+        #result{
+            margin-top:20px;
+            text-align:center;
+            font-size:22px;
+            font-weight:bold;
+            color:green;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome Back to my website</h1>
-    <a href="about">about</a>
+
+<div class="container">
+
+    <h2>House Price Prediction</h2>
+
+    <label>Median Income</label>
+    <input type="number" step="any" id="MedInc">
+
+    <label>House Age</label>
+    <input type="number" step="any" id="HouseAge">
+
+    <label>Average Rooms</label>
+    <input type="number" step="any" id="AveRooms">
+
+    <label>Average Bedrooms</label>
+    <input type="number" step="any" id="AveBedrms">
+
+    <label>Population</label>
+    <input type="number" step="any" id="Population">
+
+    <label>Average Occupancy</label>
+    <input type="number" step="any" id="AveOccup">
+
+    <label>Latitude</label>
+    <input type="number" step="any" id="Latitude">
+
+    <label>Longitude</label>
+    <input type="number" step="any" id="Longitude">
+
+    <button onclick="predict()">Predict</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+async function predict(){
+
+    const data = {
+        MedInc: parseFloat(document.getElementById("MedInc").value),
+        HouseAge: parseFloat(document.getElementById("HouseAge").value),
+        AveRooms: parseFloat(document.getElementById("AveRooms").value),
+        AveBedrms: parseFloat(document.getElementById("AveBedrms").value),
+        Population: parseFloat(document.getElementById("Population").value),
+        AveOccup: parseFloat(document.getElementById("AveOccup").value),
+        Latitude: parseFloat(document.getElementById("Latitude").value),
+        Longitude: parseFloat(document.getElementById("Longitude").value)
+    };
+
+    try{
+
+        const response = await fetch("http://127.0.0.1:8000/predict",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify(data)
+        });
+
+        const result = await response.json();
+
+        document.getElementById("result").innerHTML =
+        "Predicted Value: <br><span style='color:blue'>" +
+        result.prediction +
+        "</span>";
+
+    }
+    catch(error){
+        document.getElementById("result").innerHTML =
+        "<span style='color:red'>Error: "+error.message+"</span>";
+    }
+
+}
+
+</script>
+
 </body>
 </html>
